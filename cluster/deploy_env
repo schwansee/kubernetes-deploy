@@ -1,0 +1,21 @@
+## DEFAULT_RELEASE
+#export KUBE_VERSION=1.2.0
+#export FLANNEL_VERSION=0.5.0
+#export ETCD_VERSION=2.2.0
+
+## LATEST_RELEASE
+export KUBE_VERSION=1.3.5
+export FLANNEL_VERSION=0.5.5
+export ETCD_VERSION=2.3.1
+
+## ubuntu/config-default.sh
+export nodes="root@192.168.137.139"
+export roles="ai"
+export NUM_NODES=1
+#export SERVICE_CLUSTER_IP_RANGE=192.168.3.0/24
+#export FLANNEL_NET=172.17.0.0/24
+#export DNS_SERVER_IP=192.168.3.10
+
+export KUBERNETES_PROVIDER=ubuntu
+
+#export KUBECTL_PATH=/usr/local/bin
