@@ -30,4 +30,6 @@ else
     popd
   fi
 
+  echo "TODO: get etcd, flannel & kubernetes packages"
+
 fi
