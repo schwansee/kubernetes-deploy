@@ -22,7 +22,6 @@ sudo dpkg -i ${PACKAGE_PATH}/aufs-tools_3.2+20130722-1.1_amd64.deb
 sudo dpkg -i ${PACKAGE_PATH}/cgroup-lite_1.9_all.deb
 sudo dpkg -i ${PACKAGE_PATH}/libltdl7_2.4.2-1.7ubuntu1_amd64.deb
 sudo dpkg -i ${PACKAGE_PATH}/libsystemd-journal0_204-5ubuntu20.19_amd64.deb
-sudo dpkg -i ${PACKAGE_PATH}/docker-engine_1.9.1-0~trusty_amd64.deb
 
 # Install Docker.
 sudo dpkg -i ${PACKAGE_PATH}/docker-engine_${DOCKER_VERSION}-0~trusty_amd64.deb
