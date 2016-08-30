@@ -20,6 +20,8 @@
 # author @resouer @WIZARD-CXY
 set -e
 
+DOWNLOAD_PATH=${DOWNLOAD_PATH:-$HOME}
+
 function cleanup {
   # cleanup work
   rm -rf flannel* kubernetes* etcd* binaries
@@ -34,9 +36,14 @@ mkdir -p binaries/minion
 FLANNEL_VERSION=${FLANNEL_VERSION:-"0.5.5"}
 echo "Prepare flannel ${FLANNEL_VERSION} release ..."
 grep -q "^${FLANNEL_VERSION}\$" binaries/.flannel 2>/dev/null || {
-# curl -L  https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz -o flannel.tar.gz
-  cp /home/sieg/Downloads/dashboard/kubernetes/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz flannel.tar.gz
-  tar xzf flannel.tar.gz
+  if [ ! -d flannel-${FLANNEL_VERSION} ]; then
+    if [ ! -f ${DOWNLOAD_PATH}/kubernetes/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz ]; then
+      curl -L  https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz -o flannel.tar.gz
+    else
+      cp ${DOWNLOAD_PATH}/kubernetes/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz flannel.tar.gz
+    fi
+    tar xzf flannel.tar.gz
+  fi
   cp flannel-${FLANNEL_VERSION}/flanneld binaries/master
   cp flannel-${FLANNEL_VERSION}/flanneld binaries/minion
   echo ${FLANNEL_VERSION} > binaries/.flannel
@@ -47,9 +54,14 @@ ETCD_VERSION=${ETCD_VERSION:-"2.2.1"}
 ETCD="etcd-v${ETCD_VERSION}-linux-amd64"
 echo "Prepare etcd ${ETCD_VERSION} release ..."
 grep -q "^${ETCD_VERSION}\$" binaries/.etcd 2>/dev/null || {
-# curl -L https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/${ETCD}.tar.gz -o etcd.tar.gz
-  cp /home/sieg/Downloads/dashboard/kubernetes/${ETCD}.tar.gz etcd.tar.gz
-  tar xzf etcd.tar.gz
+  if [ ! -d ${ETCD} ]; then
+    if [ ! -f ${DOWNLOAD_PATH}/kubernetes/${ETCD}.tar.gz ]; then
+      curl -L https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/${ETCD}.tar.gz -o etcd.tar.gz
+    else
+      cp ${DOWNLOAD_PATH}/kubernetes/${ETCD}.tar.gz etcd.tar.gz
+    fi
+    tar xzf etcd.tar.gz
+  fi
   cp ${ETCD}/etcd ${ETCD}/etcdctl binaries/master
   echo ${ETCD_VERSION} > binaries/.etcd
 }
@@ -58,9 +70,15 @@ grep -q "^${ETCD_VERSION}\$" binaries/.etcd 2>/dev/null || {
 KUBE_VERSION=${KUBE_VERSION:-"1.1.8"}
 echo "Prepare kubernetes ${KUBE_VERSION} release ..."
 grep -q "^${KUBE_VERSION}\$" binaries/.kubernetes 2>/dev/null || {
-# curl -L https://github.com/kubernetes/kubernetes/releases/download/v${KUBE_VERSION}/kubernetes.tar.gz -o kubernetes.tar.gz
-  cp /home/sieg/Downloads/dashboard/kubernetes/kubernetes-v${KUBE_VERSION}.tar.gz kubernetes.tar.gz
-  tar xzf kubernetes.tar.gz
+  if [ ! -d kubernetes ]; then
+    if [ ! -f ${DOWNLOAD_PATH}/kubernetes/kubernetes-v${KUBE_VERSION}.tar.gz ]; then
+      curl -L https://github.com/kubernetes/kubernetes/releases/download/v${KUBE_VERSION}/kubernetes.tar.gz -o kubernetes.tar.gz
+    else
+      cp ${DOWNLOAD_PATH}/kubernetes/kubernetes-v${KUBE_VERSION}.tar.gz kubernetes.tar.gz
+    fi
+    tar xzf kubernetes.tar.gz
+  fi
+
   pushd kubernetes/server
   tar xzf kubernetes-server-linux-amd64.tar.gz
   popd
@@ -73,7 +91,8 @@ grep -q "^${KUBE_VERSION}\$" binaries/.kubernetes 2>/dev/null || {
   echo ${KUBE_VERSION} > binaries/.kubernetes
 }
 
-rm -rf flannel* kubernetes* etcd*
+## 注释该行: 不删除安装包，无须重复拷贝解压
+#rm -rf flannel* kubernetes* etcd*
 
 echo "Done! All your binaries locate in kubernetes/cluster/ubuntu/binaries directory"
 popd

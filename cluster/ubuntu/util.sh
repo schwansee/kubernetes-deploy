@@ -365,8 +365,14 @@ function kube-up() {
   # downloading tarball release
   "${KUBE_ROOT}/cluster/ubuntu/download-release.sh"
 
-  # Fetch the hacked easyrsa that make-ca-cert.sh will use
-  curl -L -O https://storage.googleapis.com/kubernetes-release/easy-rsa/easy-rsa.tar.gz > /dev/null 2>&1
+  if [ ! -f easy-rsa.tar.gz ]; then
+    if [ ! -f ${DOWNLOAD_PATH}/easy-rsa.tar.gz ]; then
+      # Fetch the hacked easyrsa that make-ca-cert.sh will use
+      curl -L -O https://storage.googleapis.com/kubernetes-release/easy-rsa/easy-rsa.tar.gz > /dev/null 2>&1
+    else
+      cp ${DOWNLOAD_PATH}/kubernetes/easy-rsa.tar.gz .
+    fi
+  fi
 
   if ! check-CNI-config; then
     return
