@@ -33,3 +33,6 @@ export KUBERNETES_PROVIDER=ubuntu
 
 ## Customized options
 export DOWNLOAD_PATH=/home/sieg/Downloads/dashboard
+
+## Customized env vars
+export DOCKER_REGISTRY_VERSION=2
