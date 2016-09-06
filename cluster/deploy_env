@@ -32,7 +32,7 @@ export KUBERNETES_PROVIDER=ubuntu
 #export KUBECTL_PATH=/usr/local/bin
 
 ## Customized options
-export DOWNLOAD_PATH=/home/sieg/Downloads/dashboard
+export DOWNLOAD_PATH=/home/sieg/Downloads/dashboard_packages
 
 ## Customized env vars
 ## docker registry

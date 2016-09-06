@@ -1,0 +1,8 @@
+1. pre-flight: 预装系统环境
+2. install cluster: 安装kubernetes集群
+   a. 下载kubernetes组件
+   b. 导出安装环境变量
+      1). 将DOWNLOAD_PATH统一改成PACKAGE_PATH
+      2). 将安装包文件夹命名为dashboard_packages
+   c. 执行安装脚本
+3. install addons: 安装kubernetes插件
