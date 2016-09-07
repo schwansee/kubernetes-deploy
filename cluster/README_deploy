@@ -19,6 +19,10 @@
 侵入式修改
 ----------
 TODO:
-对原生kubernets注入了两处修改, 希望有办法可以将这两个功能剥离出来
+对原生kubernets注入了多处修改, 希望有办法可以将这些功能剥离出来
 1. ubuntu/download-release.sh: 原本每次都要重新下载组建，现在只要本地存在就无需下载，不存在也只需下一次就可以了，之后不用重复下载
 2. ubuntu/util.sh: 对kube-up()函数中，下载easy-rsa.tar.gz的行为进行修改，只要本地存在就无需下载
+
+3. 对于dns和dashboard插件的镜像下载源进行了修改，修改为本地镜像
+   addons/dns/skydns-rc.yaml.in
+   addons/dashboard/dashboard-controller.yaml
