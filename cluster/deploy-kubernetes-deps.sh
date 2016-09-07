@@ -16,20 +16,54 @@ function get_kubernetes_deps_tar() {
 
   echo "Package path: ${PACKAGE_PATH}"
 
-  echo "get easy-rsa.tar.gz"
-  if [ ! -f ${PACKAGE_PATH}/easy-rsa.tar.gz ]; then
-    pushd `pwd`
+  echo -n "get easy-rsa.tar.gz"
+  if [ ! -f ${PACKAGE_PATH}/kubernetes/easy-rsa.tar.gz ]; then
+    pushd `pwd` >& /dev/null
     cd ${PACKAGE_PATH}
     curl -L -O https://sstorage.googleapis.com/kubernetes-release/easy-rsa/easy-rsa.tar.gz -m ${DOWNLOAD_TIMEOUT} >& /dev/null
     if [ $? -ne 0 ]; then
-      echo && echo "easy-rsa download failed"
-      popd
+      echo " ... failed"
+      echo " please find another download source for the package - easy-rsa.tar.gz"
+      popd >& /dev/null
+      exit 110
+    else
+      popd >& /dev/null
+    fi
+  fi
+  echo " ... done"
+
+  echo -n "get flannel"
+  if [ ! -f ${PACKAGE_PATH}/kubernetes/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz ]; then
+    wget https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz -P ${PACKAGE_PATH}/kubernetes >& /dev/null
+    if [ $? -ne 0 ]; then
+      echo " ... failed"
+      echo " please find another download source for the package - flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz"
       exit 110
     fi
-    popd
   fi
+  echo " ... done"
 
-  echo "TODO: get etcd, flannel & kubernetes packages here"
+  echo -n "get etcd"
+  if [ ! -f ${PACKAGE_PATH}/kubernetes/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz ]; then
+    wget https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/etc-v${ETCD_VERSION}-linux-amd64.tar.gz -P ${PACKAGE_PATH}/kubernetes >& /dev/null
+    if [ $? -ne 0 ]; then
+      echo " ... failed"
+      echo " please find another download source for the package - etcd-v${ETCD_VERSION}-linux-amd64.tar.gz"
+      exit 110
+    fi
+  fi
+  echo " ... done"
+
+  echo -n "get kubernetes"
+  if [ ! -f ${PACKAGE_PATH}/kubernetes/kubernetes-v${KUBE_VERSION}.tar.gz ]; then
+    wget https://github.com/kubernetes/kubernetes/releases/download/v${KUBE_VERSION}/kubernetes.tar.gz -O kubernetes-v${KUBE_VERSION}.tar.gz -P ${PACKAGE_PATH}/kubernetes >& /dev/null
+    if [ $? -ne 0 ]; then
+      echo " ... failed"
+      echo " please find another download source for the package - kubernetes-v${KUBE_VERSION}.tar.gz"
+      exit 110
+    fi
+  fi
+  echo " ... done"
 }
 
 ## 导入dns插件镜像, 导入顺序根据skydns-rc.yaml中的镜像下载顺序决定

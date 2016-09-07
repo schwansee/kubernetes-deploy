@@ -1,3 +1,5 @@
+0. get_xxx_deps()函数中, 下载组件之前: 先检查是否已经存在，再执行函数中的下载动作
+
 1. pre-flight: 预装系统环境
 2. install cluster: 安装kubernetes集群
    a. 下载kubernetes组件
