@@ -31,10 +31,10 @@ export KUBERNETES_PROVIDER=ubuntu
 ## Other env vars
 #export KUBECTL_PATH=/usr/local/bin
 
-## Customized options
-export DOWNLOAD_PATH=/home/sieg/Downloads/dashboard_packages
-
 ## Customized env vars
+## download options
+export DOWNLOAD_TIMEOUT=60
+export PACKAGE_PATH=/home/sieg/Downloads/dashboard_packages
 ## docker registry
 export DOCKER_REGISTRY_VERSION=2
 ## kubernetes addons - dns
@@ -45,4 +45,3 @@ export SKYDNS_VERSION=2015-10-13-8c72f8c
 export EXECHEALTHZ_VERSION=1.0
 ## kubernetes addons - dashboard
 export DASHBOARD_VERSION=1.0.0
-
