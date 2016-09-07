@@ -23,7 +23,8 @@ function get_kubernetes_deps_tar() {
     curl -L -O https://sstorage.googleapis.com/kubernetes-release/easy-rsa/easy-rsa.tar.gz -m ${DOWNLOAD_TIMEOUT} >& /dev/null
     if [ $? -ne 0 ]; then
       echo " ... failed"
-      echo " please find another download source for the package - easy-rsa.tar.gz"
+      echo " please find another resource for the package - easy-rsa.tar.gz"
+      echo " download it and put it to the path: ${PACKAGE_PATH}/kubernetes"
       popd >& /dev/null
       exit 110
     else
@@ -37,7 +38,8 @@ function get_kubernetes_deps_tar() {
     wget https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz -P ${PACKAGE_PATH}/kubernetes >& /dev/null
     if [ $? -ne 0 ]; then
       echo " ... failed"
-      echo " please find another download source for the package - flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz"
+      echo " please find another resource for the package - flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz"
+      echo " download it and put it to the path: ${PACKAGE_PATH}/kubernetes"
       exit 110
     fi
   fi
@@ -48,7 +50,8 @@ function get_kubernetes_deps_tar() {
     wget https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/etc-v${ETCD_VERSION}-linux-amd64.tar.gz -P ${PACKAGE_PATH}/kubernetes >& /dev/null
     if [ $? -ne 0 ]; then
       echo " ... failed"
-      echo " please find another download source for the package - etcd-v${ETCD_VERSION}-linux-amd64.tar.gz"
+      echo " please find another resource for the package - etcd-v${ETCD_VERSION}-linux-amd64.tar.gz"
+      echo " download it and put it to the path: ${PACKAGE_PATH}/kubernetes"
       exit 110
     fi
   fi
@@ -59,7 +62,8 @@ function get_kubernetes_deps_tar() {
     wget https://github.com/kubernetes/kubernetes/releases/download/v${KUBE_VERSION}/kubernetes.tar.gz -O kubernetes-v${KUBE_VERSION}.tar.gz -P ${PACKAGE_PATH}/kubernetes >& /dev/null
     if [ $? -ne 0 ]; then
       echo " ... failed"
-      echo " please find another download source for the package - kubernetes-v${KUBE_VERSION}.tar.gz"
+      echo " please find another resource for the package - kubernetes-v${KUBE_VERSION}.tar.gz"
+      echo " download it and put it to the path: ${PACKAGE_PATH}/kubernetes"
       exit 110
     fi
   fi
