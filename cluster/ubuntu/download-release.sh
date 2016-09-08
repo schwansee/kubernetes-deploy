@@ -20,7 +20,7 @@
 # author @resouer @WIZARD-CXY
 set -e
 
-DOWNLOAD_PATH=${DOWNLOAD_PATH:-$HOME}
+PACKAGE_PATH=${PACKAGE_PATH:-$HOME}
 
 function cleanup {
   # cleanup work
@@ -37,10 +37,10 @@ FLANNEL_VERSION=${FLANNEL_VERSION:-"0.5.5"}
 echo "Prepare flannel ${FLANNEL_VERSION} release ..."
 grep -q "^${FLANNEL_VERSION}\$" binaries/.flannel 2>/dev/null || {
   if [ ! -d flannel-${FLANNEL_VERSION} ]; then
-    if [ ! -f ${DOWNLOAD_PATH}/kubernetes/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz ]; then
+    if [ ! -f ${PACKAGE_PATH}/kubernetes/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz ]; then
       curl -L  https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz -o flannel.tar.gz
     else
-      cp ${DOWNLOAD_PATH}/kubernetes/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz flannel.tar.gz
+      cp ${PACKAGE_PATH}/kubernetes/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz flannel.tar.gz
     fi
     tar xzf flannel.tar.gz
   fi
@@ -55,10 +55,10 @@ ETCD="etcd-v${ETCD_VERSION}-linux-amd64"
 echo "Prepare etcd ${ETCD_VERSION} release ..."
 grep -q "^${ETCD_VERSION}\$" binaries/.etcd 2>/dev/null || {
   if [ ! -d ${ETCD} ]; then
-    if [ ! -f ${DOWNLOAD_PATH}/kubernetes/${ETCD}.tar.gz ]; then
+    if [ ! -f ${PACKAGE_PATH}/kubernetes/${ETCD}.tar.gz ]; then
       curl -L https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/${ETCD}.tar.gz -o etcd.tar.gz
     else
-      cp ${DOWNLOAD_PATH}/kubernetes/${ETCD}.tar.gz etcd.tar.gz
+      cp ${PACKAGE_PATH}/kubernetes/${ETCD}.tar.gz etcd.tar.gz
     fi
     tar xzf etcd.tar.gz
   fi
@@ -71,10 +71,10 @@ KUBE_VERSION=${KUBE_VERSION:-"1.1.8"}
 echo "Prepare kubernetes ${KUBE_VERSION} release ..."
 grep -q "^${KUBE_VERSION}\$" binaries/.kubernetes 2>/dev/null || {
   if [ ! -d kubernetes ]; then
-    if [ ! -f ${DOWNLOAD_PATH}/kubernetes/kubernetes-v${KUBE_VERSION}.tar.gz ]; then
+    if [ ! -f ${PACKAGE_PATH}/kubernetes/kubernetes-v${KUBE_VERSION}.tar.gz ]; then
       curl -L https://github.com/kubernetes/kubernetes/releases/download/v${KUBE_VERSION}/kubernetes.tar.gz -o kubernetes.tar.gz
     else
-      cp ${DOWNLOAD_PATH}/kubernetes/kubernetes-v${KUBE_VERSION}.tar.gz kubernetes.tar.gz
+      cp ${PACKAGE_PATH}/kubernetes/kubernetes-v${KUBE_VERSION}.tar.gz kubernetes.tar.gz
     fi
     tar xzf kubernetes.tar.gz
   fi
