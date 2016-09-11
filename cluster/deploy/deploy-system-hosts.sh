@@ -20,7 +20,7 @@ EOF'
 }
 
 function uninstall_system_hosts() {
-  if [ -f /etc/hosts.gcr && -f /etc/hosts.bak ]; then 
+  if [ -f /etc/hosts.gcr -a -f /etc/hosts.bak ]; then 
     sudo cp /etc/hosts{.bak,}
     sudo rm /etc/hosts.{gcr,bak}
   fi

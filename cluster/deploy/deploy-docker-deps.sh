@@ -153,26 +153,50 @@ function install_docker_deps_apt() {
 }
 
 function install_docker_deps_dpkg() {
-  echo "ensure that APT works with the https method, and that CA certificates are installed."
-  sudo dpkg -i ${PACKAGE_PATH}/docker/apt-transport-https_1.0.1ubuntu2.14_amd64.deb
-  sudo dpkg -i ${PACKAGE_PATH}/docker/ca-certificates_20160104ubuntu0.14.04.1_all.deb
+  ## ensure that APT works with the https method, and that CA certificates are installed."
+  echo -n "Install apt-transport-https"
+  sudo dpkg -i ${PACKAGE_PATH}/docker/apt-transport-https_1.0.1ubuntu2.14_amd64.deb >& /dev/null
+  if [ $? -ne 0 ]; then
+    echo " ... failed"
+    echo " please find another resource for the package - apt-transport-https_1.0.1ubuntu2.14_amd64.deb"
+    echo " download it and put it to the path: ${PACKAGE_PATH}/docker"
+    exit 125
+  fi
+  echo " ... done"
+
+  echo -n "Install ca-certificates"
+  sudo dpkg -i ${PACKAGE_PATH}/docker/ca-certificates_20160104ubuntu0.14.04.1_all.deb >& /dev/null
+  if [ $? -ne 0 ]; then
+    echo " ... failed"
+    echo " please find another resource for the package - ca-certificates_20160104ubuntu0.14.04.1_all.deb"
+    echo " download it and put it to the path: ${PACKAGE_PATH}/docker"
+    exit 125
+  fi
+  echo " ... done"
   
-  echo "The linux-image-extra-* packages allows you use the aufs storage driver."
+  ## "The linux-image-extra-* packages allows you use the aufs storage driver."
   ##TODO: specify a version or supply all versions
   #sudo dpkg -i ${PACKAGE_PATH}/linux-image-extra-$(uname -r).deb
   #sudo dpkg -i ${PACKAGE_PATH}/linux-image-extra-virtual_3.13.0.93.100_amd64.deb
   
   echo "Purge the old repo if it exists."
-  sudo apt-get purge lxc-docker
+  sudo apt-get purge lxc-docker >& /dev/null
   
-  echo "install extra packages:  aufs-tools cgroup-lite libltdl7 libsystemd-journal0"
-  sudo dpkg -i ${PACKAGE_PATH}/docker/aufs-tools_3.2+20130722-1.1_amd64.deb 
-  sudo dpkg -i ${PACKAGE_PATH}/docker/cgroup-lite_1.9_all.deb
-  sudo dpkg -i ${PACKAGE_PATH}/docker/libltdl7_2.4.2-1.7ubuntu1_amd64.deb
-  sudo dpkg -i ${PACKAGE_PATH}/docker/libsystemd-journal0_204-5ubuntu20.19_amd64.deb
+  echo "Install extra packages:  aufs-tools cgroup-lite libltdl7 libsystemd-journal0"
+  sudo dpkg -i ${PACKAGE_PATH}/docker/aufs-tools_3.2+20130722-1.1_amd64.deb >& /dev/null
+  sudo dpkg -i ${PACKAGE_PATH}/docker/cgroup-lite_1.9_all.deb >& /dev/null
+  sudo dpkg -i ${PACKAGE_PATH}/docker/libltdl7_2.4.2-1.7ubuntu1_amd64.deb >& /dev/null
+  sudo dpkg -i ${PACKAGE_PATH}/docker/libsystemd-journal0_204-5ubuntu20.19_amd64.deb >& /dev/null
   
-  ## Install Docker.
-  sudo dpkg -i ${PACKAGE_PATH}/docker/docker-engine_${DOCKER_VERSION}-0~trusty_amd64.deb
+  echo -n "Install Docker"
+  sudo dpkg -i ${PACKAGE_PATH}/docker/docker-engine_${DOCKER_VERSION}-0~trusty_amd64.deb >& /dev/null
+  if [ $? -ne 0 ]; then
+    echo " ... failed"
+    echo " please find another resource for the package - docker-engine_${DOCKER_VERSION}-0~trusty_amd64.deb"
+    echo " download it and put it to the path: ${PACKAGE_PATH}/docker"
+    exit 125
+  fi
+  echo " ... done"
 }
 
 function uninstall_docker_deps() {

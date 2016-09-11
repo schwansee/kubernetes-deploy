@@ -20,7 +20,7 @@
 # author @resouer @WIZARD-CXY
 set -e
 
-PACKAGE_PATH=${PACKAGE_PATH:-$HOME}
+PACKAGE_PATH=${PACKAGE_PATH:-$HOME/dashboard_packages}
 
 function cleanup {
   # cleanup work

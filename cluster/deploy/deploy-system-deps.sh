@@ -71,14 +71,35 @@ function install_system_deps_apt() {
 }
 
 function install_system_deps_dpkg() {
-  echo "Install openssh-client package"
-  sudo dpkg -i ${PACKAGE_PATH}/system/openssh-client_6.6p1-2ubuntu2.8_amd64.deb
+  echo -n "Install openssh-client package"
+  sudo dpkg -i ${PACKAGE_PATH}/system/openssh-client_6.6p1-2ubuntu2.8_amd64.deb >& /dev/null
+  if [ $? -ne 0 ]; then
+    echo " ... failed"
+    echo " please find another resource for the package - openssh-client_6.6p1-2ubuntu2.8_amd64.deb"
+    echo " download it and put it to the path: ${PACKAGE_PATH}/system"
+    exit 125
+  fi
+  echo " ... done"
+ 
+  echo -n "Install curl & libcurl3 packages"
+  sudo dpkg -i ${PACKAGE_PATH}/system/{curl_7.35.0-1ubuntu2.8_amd64.deb,libcurl3_7.35.0-1ubuntu2.8_amd64.deb} >& /dev/null
+  if [ $? -ne 0 ]; then
+    echo " ... failed"
+    echo " please find another resource for the package - curl_7.35.0-1ubuntu2.8_amd64.deb and libcurl3_7.35.0-1ubuntu2.8_amd64.deb"
+    echo " download it and put it to the path: ${PACKAGE_PATH}/system"
+    exit 125
+  fi
+  echo " ... done"
   
-  echo "Install curl & libcurl3 packages"
-  sudo dpkg -i ${PACKAGE_PATH}/system/{curl_7.35.0-1ubuntu2.8_amd64.deb,libcurl3_7.35.0-1ubuntu2.8_amd64.deb}
-  
-  echo "Install bridge-utils"
-  sudo dpkg -i ${PACKAGE_PATH}/system/bridge-utils_1.5-6ubuntu2_amd64.deb
+  echo -n "Install bridge-utils"
+  sudo dpkg -i ${PACKAGE_PATH}/system/bridge-utils_1.5-6ubuntu2_amd64.deb >& /dev/null
+  if [ $? -ne 0 ]; then
+    echo " ... failed"
+    echo " please find another resource for the package - bridge-utils_1.5-6ubuntu2_amd64.deb"
+    echo " download it and put it to the path: ${PACKAGE_PATH}/system"
+    exit 125
+  fi
+  echo " ... done"
 }
 
 function uninstall_system_deps() {
