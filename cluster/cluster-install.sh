@@ -107,11 +107,42 @@ function install_k8s_dns_dashboard() {
     fi
     ((ii=ii+1))
   done
-:
 }
 
 function install_k8s_heapster() {
-:
+  HEAPSTER_SCRIPT_DIRECTORY=heapster
+  HEAPSTER_SCRIPT_PATH=$SCRIPT_PATH/$HEAPSTER_SCRIPT_DIRECTORY
+
+  ## copy the origin files to script directory
+  cp -r $INSTALL_ROOT/$HEAPSTER_SCRIPT_DIRECTORY $SCRIPT_PATH
+
+  local ii=0
+  for i in $nodes; do
+    nodeIP=${i#*@}
+    if [[ "${roles_array[${ii}]}" == "ai" || "${roles_array[${ii}]}" == "a" ]]; then
+      echo ai or a $nodeIP
+
+      ## sed heapster-controller.yaml
+      sed -i "s/ imagePullPolicy/# imagePullPolicy/g" $HEAPSTER_SCRIPT_PATH/heapster-controller.yaml
+      sed -i "s/kubernetes.default/$nodeIP:8080\?inClusterConfig=false\&useServiceAccount=false/g" $HEAPSTER_SCRIPT_PATH/heapster-controller.yaml
+      sed -i "s/monitoring-influxdb/$nodeIP/g" $HEAPSTER_SCRIPT_PATH/heapster-controller.yaml
+
+      ## sed influxdb-grafana-controller.yaml
+      sed -i "/heapster_influxdb/a \ \ \ \ \ \ \ \ ports:\n        - containerPort: 8086\n          hostPort: 8086\n        - containerPort: 8083\n          hostPort: 8083" $HEAPSTER_SCRIPT_PATH/influxdb-grafana-controller.yaml
+      sed -i "s/monitoring-influxdb/$nodeIP/g" $HEAPSTER_SCRIPT_PATH/influxdb-grafana-controller.yaml
+
+      ## it may be wrong, we should expose host port 8086
+      ## sed influxdb-service.yaml
+      #sed -i "/targetPort: 8086/d " $HEAPSTER_SCRIPT_PATH/influxdb-service.yaml
+
+      scp -r $HEAPSTER_SCRIPT_PATH $nodeIP:$PACKAGE_PATH/$SCRIPT_DIRECTORY >& /dev/null
+      ssh $nodeIP "cd $PACKAGE_PATH/$SCRIPT_DIRECTORY && source $ENV_FILE_NAME && \
+                    kubectl create -f $HEAPSTER_SCRIPT_DIRECTORY"
+
+      break
+    fi
+    ((ii=ii+1))
+  done
 }
 
 #sed_config_default
@@ -121,5 +152,4 @@ function install_k8s_heapster() {
 
 #install_k8s_cluster
 #install_k8s_dns_dashboard
-
-
+#install_k8s_heapster
