@@ -7,8 +7,8 @@ DOCKER_REGISTRY_VERSION=${DOCKER_REGISTRY_VERSION:-2}
 ## 安装registry
 function install_docker_registry() {
   ## 先从本地导入registry镜像
-  echo "import registry image"
-  cat ${PACKAGE_PATH}/kubernetes/images/registry-${DOCKER_REGISTRY_VERSION}.tar | sudo docker import - registry:${DOCKER_REGISTRY_VERSION}
+  echo "load registry image"
+#  sudo docker load < ${PACKAGE_PATH}/kubernetes/images/registry-${DOCKER_REGISTRY_VERSION}.tar >& /dev/null
   
   ## 再运行registry容器
   echo "run registry and expose 5000 port"
@@ -20,12 +20,25 @@ function push_image_to_registry() {
   IMAGE_NAME=$1
   IMAGE_VERSION=$2
 
-  echo "import specified image - ${IMAGE_NAME}-${IMAGE_VERSION}.tar"
-  cat ${PACKAGE_PATH}/kubernetes/images/${IMAGE_NAME}-${IMAGE_VERSION} | sudo docker import - ${IMAGE_NAME}:${IMAGE_VERSION}
+  echo "load specified image - ${IMAGE_NAME}-${IMAGE_VERSION}.tar"
+#  sudo docker load < ${PACKAGE_PATH}/kubernetes/images/${IMAGE_NAME}-${IMAGE_VERSION}.tar >& /dev/null
 
   echo "tag it and push to registry"
-  docker tag ${IMAGE_NAME} localhost:5000/${IMAGE_NAME}
-  docker push localhost:5000/${IMAGE_NAME}
+  sudo docker tag -f ${IMAGE_NAME} localhost:5000/${IMAGE_NAME}
+
+  local counter=0
+  sudo docker push localhost:5000/${IMAGE_NAME}
+  while [ $? -ne 0 ]
+  do
+    ((counter=counter+1))
+    if [ $counter -lt 2 ]; then
+      echo "try again $counter"
+      sudo docker push localhost:5000/${IMAGE_NAME}
+    else
+      echo "push image failed for $counter times"
+      break
+    fi
+  done
 }
 
 ## 删除registry

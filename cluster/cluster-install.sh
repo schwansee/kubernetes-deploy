@@ -145,6 +145,20 @@ function install_k8s_heapster() {
   done
 }
 
+function install_k8s_registry() {
+  REGISTRY_IMAGE_NAME=$1
+  REGISTRY_IMAGE_VERSION=$2
+
+  local ii=0
+  for i in $nodes; do
+    nodeIP=${i#*@}
+    ssh $nodeIP "cd $PACKAGE_PATH/$SCRIPT_DIRECTORY && source $ENV_FILE_NAME && \
+                  source deploy-docker-registry.sh && \
+                  install_docker_registry && \
+                  push_image_to_registry $REGISTRY_IMAGE_NAME $REGISTRY_IMAGE_VERSION"
+  done
+}
+
 #sed_config_default
 #sed_download_release
 #sed_util
@@ -153,3 +167,5 @@ function install_k8s_heapster() {
 #install_k8s_cluster
 #install_k8s_dns_dashboard
 #install_k8s_heapster
+
+#install_k8s_registry ubuntu latest
