@@ -11,7 +11,10 @@ roles_array=($roles)
 function sed_config_default() {
   if [ ! -f $INSTALL_ROOT/ubuntu/config-default.sh.bak ]; then
     cp $INSTALL_ROOT/ubuntu/config-default.sh{,.bak}
+  else
+    cp $INSTALL_ROOT/ubuntu/config-default.sh{.bak,}
   fi
+
   sed -i "s/nodes:\-.*/nodes:\-\"${nodes}\"}/g" $INSTALL_ROOT/ubuntu/config-default.sh
   sed -i "s/roles:\-.*/roles:\-\"${roles}\"}/g" $INSTALL_ROOT/ubuntu/config-default.sh
   sed -i "s/NUM_NODES:\-.*/NUM_NODES:\-\"${NUM_NODES}\"}/g" $INSTALL_ROOT/ubuntu/config-default.sh
@@ -20,7 +23,10 @@ function sed_config_default() {
 function sed_download_release() {
   if [ ! -f $INSTALL_ROOT/ubuntu/download-release.sh.bak ]; then
     cp $INSTALL_ROOT/ubuntu/download-release.sh{,.bak}
+  else
+    cp $INSTALL_ROOT/ubuntu/download-release.sh{.bak,}
   fi
+
   sed -i "/set \-e/a PACKAGE_PATH=\${PACKAGE_PATH:-\$HOME/dashboard_packages}" $INSTALL_ROOT/ubuntu/download-release.sh
 
   sed -i "/curl.*coreos\/flannel.*/d " $INSTALL_ROOT/ubuntu/download-release.sh
@@ -41,6 +47,8 @@ function sed_download_release() {
 function sed_util() {
   if [ ! -f $INSTALL_ROOT/ubuntu/util.sh.bak ]; then
     cp $INSTALL_ROOT/ubuntu/util.sh{,.bak}
+  else
+    cp $INSTALL_ROOT/ubuntu/util.sh{.bak,}
   fi
 
   sed -i "/curl.*easy-rsa/a PACKAGE_PATH=\${PACKAGE_PATH:-\$HOME/dashboard_packages}\n if [ ! -f easy-rsa.tar.gz ]; then\n if [ ! -f \${PACKAGE_PATH}/kubernetes/easy-rsa.tar.gz ]; then\n curl -L -O https://storage.googleapis.com/kubernetes-release/easy-rsa/easy-rsa.tar.gz > /dev/null 2>&1\n else\n cp \${PACKAGE_PATH}/kubernetes/easy-rsa.tar.gz .\n fi\n fi\n" $INSTALL_ROOT/ubuntu/util.sh
@@ -50,6 +58,8 @@ function sed_util() {
 function sed_reconfDocker() {
   if [ ! -f $INSTALL_ROOT/ubuntu/reconfDocker.sh.bak ]; then
     cp $INSTALL_ROOT/ubuntu/reconfDocker.sh{,.bak}
+  else
+    cp $INSTALL_ROOT/ubuntu/reconfDocker.sh{.bak,}
   fi
 
   sed -i "/source \/etc\/default\/docker/d" $INSTALL_ROOT/ubuntu/reconfDocker.sh
