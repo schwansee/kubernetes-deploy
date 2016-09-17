@@ -152,10 +152,12 @@ function install_k8s_registry() {
   local ii=0
   for i in $nodes; do
     nodeIP=${i#*@}
-    ssh $nodeIP "cd $PACKAGE_PATH/$SCRIPT_DIRECTORY && source $ENV_FILE_NAME && \
-                  source deploy-docker-registry.sh && \
-                  install_docker_registry && \
-                  push_image_to_registry $REGISTRY_IMAGE_NAME $REGISTRY_IMAGE_VERSION"
+    if [[ "${roles_array[${ii}]}" == "ai" || "${roles_array[${ii}]}" == "i" ]]; then
+      ssh $nodeIP "cd $PACKAGE_PATH/$SCRIPT_DIRECTORY && source $ENV_FILE_NAME && \
+                    source deploy-docker-registry.sh && \
+                    install_docker_registry && \
+                    push_image_to_registry $REGISTRY_IMAGE_NAME $REGISTRY_IMAGE_VERSION"
+    fi
   done
 }
 
